@@ -14,7 +14,6 @@ const client = mailgun.client({
 // ---------- POST ----------
 const formPost = async (req, res) => {
   try {
-    console.log(req.body);
     const { firstname, lastname, email, message } = req.body;
 
     if (firstname && lastname && email && message) {
@@ -22,16 +21,13 @@ const formPost = async (req, res) => {
         from: `${firstname} ${lastname} <${email}>`,
         to: process.env.EMAIL,
         subject: `Formulaire TripAdvisor`,
-        message: `${message}`,
+        text: `${message}`,
       };
-
-      console.log(messageData);
 
       const response = await client.messages.create(
         process.env.MAILGUN_DOMAIN,
         messageData
       );
-      console.log(response);
 
       res.status(200).json(response);
     } else {
